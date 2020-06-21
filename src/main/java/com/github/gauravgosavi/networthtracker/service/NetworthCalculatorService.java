@@ -5,4 +5,5 @@ import com.github.gauravgosavi.networthtracker.dto.NetWorthResponseDto;
 
 public interface NetworthCalculatorService {
     NetWorthResponseDto calculate(NetWorthRequestDto requestDto);
+
 }

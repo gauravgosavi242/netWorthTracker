@@ -14,19 +14,19 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class AssetsDto {
-    private BigDecimal chequingBalance;
-    private BigDecimal savingsForTaxes;
-    private BigDecimal rainyDayFund;
-    private BigDecimal savingsForFun;
-    private BigDecimal savingsForTravel;
-    private BigDecimal savingsForPersonalDevelopment;
-    private BigDecimal investment1;
-    private BigDecimal investment2;
-    private BigDecimal investment3;
-    private BigDecimal investment4;
-    private BigDecimal investment5;
-    private BigDecimal longTermAssets;
-    private BigDecimal primaryHome;
-    private BigDecimal secondHome;
-    private BigDecimal others;
+    private BigDecimal chequingBalance = BigDecimal.ZERO;
+    private BigDecimal savingsForTaxes = BigDecimal.ZERO;
+    private BigDecimal rainyDayFund = BigDecimal.ZERO;
+    private BigDecimal savingsForFun = BigDecimal.ZERO;
+    private BigDecimal savingsForTravel = BigDecimal.ZERO;
+    private BigDecimal savingsForPersonalDevelopment = BigDecimal.ZERO;
+    private BigDecimal investment1 = BigDecimal.ZERO;
+    private BigDecimal investment2 = BigDecimal.ZERO;
+    private BigDecimal investment3 = BigDecimal.ZERO;
+    private BigDecimal investment4 = BigDecimal.ZERO;
+    private BigDecimal investment5 = BigDecimal.ZERO;
+    private BigDecimal longTermAssets = BigDecimal.ZERO;
+    private BigDecimal primaryHome = BigDecimal.ZERO;
+    private BigDecimal secondHome = BigDecimal.ZERO;
+    private BigDecimal others = BigDecimal.ZERO;
 }
