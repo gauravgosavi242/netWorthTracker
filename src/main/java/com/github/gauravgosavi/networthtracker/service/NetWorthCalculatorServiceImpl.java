@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.util.Locale;
 
 @Slf4j
 @Service("networthCalculatorService")
@@ -59,7 +60,7 @@ public class NetWorthCalculatorServiceImpl implements NetworthCalculatorService 
 
         String currencyCode = StringUtils.isNotBlank(requestDto.getCurrencyCode()) ? requestDto.getCurrencyCode() : DEFAULT_CURRENCY.getCurrencyCode();
 
-        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault());
         java.util.Currency currency = java.util.Currency.getInstance(currencyCode);
         numberFormat.setCurrency(currency);
         String netWorthAsString = numberFormat.format(netWorth);

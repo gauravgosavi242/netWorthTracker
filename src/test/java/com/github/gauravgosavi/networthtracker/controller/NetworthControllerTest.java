@@ -1,17 +1,15 @@
 package com.github.gauravgosavi.networthtracker.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.gauravgosavi.networthtracker.dto.AssetsDto;
-import com.github.gauravgosavi.networthtracker.dto.LiabilitiesDto;
 import com.github.gauravgosavi.networthtracker.dto.NetWorthRequestDto;
 import com.github.gauravgosavi.networthtracker.dto.NetWorthResponseDto;
 import com.github.gauravgosavi.networthtracker.service.NetWorthCalculatorServiceImpl;
 import com.github.gauravgosavi.networthtracker.service.NetworthCalculatorService;
 import lombok.SneakyThrows;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.math.BigDecimal;
 
 public class NetworthControllerTest {
 
@@ -30,23 +28,15 @@ public class NetworthControllerTest {
 
         NetWorthResponseDto netWorthResponseDto = target.calculate(netWorthRequestDto);
 
-        NetWorthRequestDto requestDto = new NetWorthRequestDto();
+        String calculatedResponse = new ObjectMapper().writeValueAsString(netWorthResponseDto);
 
-        AssetsDto assetsDto = new AssetsDto();
-        assetsDto.setChequingBalance(BigDecimal.TEN);
-        assetsDto.setChequingBalance(BigDecimal.TEN);
+        File responseFile = new File(BASE_DIR + RESPONSE_DTO);
+        NetWorthResponseDto responseDto = new ObjectMapper().readValue(responseFile, NetWorthResponseDto.class);
 
-        LiabilitiesDto liabilitiesDto = new LiabilitiesDto();
-        liabilitiesDto.setCarLoan(BigDecimal.TEN);
-        liabilitiesDto.setCreditCard1(BigDecimal.TEN);
-        liabilitiesDto.setLineOfCredit(BigDecimal.ONE);
+        String response = new ObjectMapper().writeValueAsString(responseDto);
 
-        requestDto.setLiabilitiesDto(liabilitiesDto);
-        requestDto.setAssetsDto(assetsDto);
+        Assert.assertEquals(calculatedResponse, response);
 
-        String string = new ObjectMapper().writeValueAsString(netWorthResponseDto);
-
-        System.out.println(string);
 
     }
 }
