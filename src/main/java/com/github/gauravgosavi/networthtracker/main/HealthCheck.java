@@ -12,6 +12,8 @@ public class HealthCheck implements HealthIndicator {
     @Override
     public Health health() {
 
+        LOGGER.info("Health check called");
+
         Health health ;
         String errorCode = check();
         if(errorCode.equals("UP")){

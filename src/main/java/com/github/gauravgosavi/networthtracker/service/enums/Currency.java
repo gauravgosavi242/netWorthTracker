@@ -3,7 +3,9 @@ package com.github.gauravgosavi.networthtracker.service.enums;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Locale;
 
 public enum Currency {
     USD("USD", 1.0),
@@ -43,5 +45,24 @@ public enum Currency {
         Assert.notNull(amount, "Need valid currency amount to convert");
         BigDecimal toUSD = amount.multiply(new BigDecimal(from.getExchangeRate()));
         return toUSD.multiply(new BigDecimal(to.getExchangeRate()));
+    }
+
+    public static String convertWithFormatting(Currency from, Currency to, BigDecimal amount){
+        Assert.notNull(amount, "Need valid currency amount to convert");
+        BigDecimal toUSD = amount.multiply(new BigDecimal(from.getExchangeRate()));
+
+        BigDecimal convertedAmt = toUSD.multiply(new BigDecimal(to.getExchangeRate()));
+
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        java.util.Currency currency = java.util.Currency.getInstance(to.getCurrencyCode());
+        numberFormat.setCurrency(currency);
+
+        return numberFormat.format(convertedAmt);
+    }
+
+    public static String convertWithFormatting(Currency from, Currency to, String amount){
+        Assert.notNull(amount, "Need valid currency amount to convert");
+        String amountWithoutCurrencyCode = amount.replaceAll("[^A-Za-z0-9]", "");
+        return convertWithFormatting(from, to, new BigDecimal(amountWithoutCurrencyCode));
     }
 }

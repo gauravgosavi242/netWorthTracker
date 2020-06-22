@@ -1,7 +1,10 @@
 package com.github.gauravgosavi.networthtracker.service;
 
-import com.github.gauravgosavi.networthtracker.dto.NetWorthRequestDto;
-import com.github.gauravgosavi.networthtracker.dto.NetWorthResponseDto;
+import com.github.gauravgosavi.networthtracker.dto.request.NetWorthRequestDto;
+import com.github.gauravgosavi.networthtracker.dto.response.AssetsResponseDto;
+import com.github.gauravgosavi.networthtracker.dto.response.LiabilitiesResponseDto;
+import com.github.gauravgosavi.networthtracker.dto.response.NetWorthCurrencyConversionDto;
+import com.github.gauravgosavi.networthtracker.dto.response.NetWorthResponseDto;
 import com.github.gauravgosavi.networthtracker.service.enums.Currency;
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +30,7 @@ public class NetWorthCalculatorServiceImpl implements NetworthCalculatorService 
 
         //Add assets
         BigDecimal netAssets = BigDecimal.ZERO;
-        netAssets= netAssets.add(requestDto.getAssetsDto().getChequingBalance())
+        netAssets = netAssets.add(requestDto.getAssetsDto().getChequingBalance())
                 .add(requestDto.getAssetsDto().getSavingsForTaxes())
                 .add(requestDto.getAssetsDto().getRainyDayFund())
                 .add(requestDto.getAssetsDto().getSavingsForFun())
@@ -40,11 +43,13 @@ public class NetWorthCalculatorServiceImpl implements NetworthCalculatorService 
                 .add(requestDto.getAssetsDto().getInvestment5())
                 .add(requestDto.getAssetsDto().getPrimaryHome())
                 .add(requestDto.getAssetsDto().getSecondHome())
-                .add(requestDto.getAssetsDto().getOthers());
+                .add(requestDto.getAssetsDto().getOthers())
+                .add(requestDto.getAssetsDto().getLongTermAssets());
+
 
         //Add Liabilities
-        BigDecimal netLiabilites = BigDecimal.ZERO;
-        netLiabilites = netLiabilites.add(requestDto.getLiabilitiesDto().getCreditCard1())
+        BigDecimal netLiabilities = BigDecimal.ZERO;
+        netLiabilities = netLiabilities.add(requestDto.getLiabilitiesDto().getCreditCard1())
                 .add(requestDto.getLiabilitiesDto().getCreditCard2())
                 .add(requestDto.getLiabilitiesDto().getOther())
                 .add(requestDto.getLiabilitiesDto().getLongTermDebt())
@@ -56,7 +61,7 @@ public class NetWorthCalculatorServiceImpl implements NetworthCalculatorService 
                 .add(requestDto.getLiabilitiesDto().getCarLoan());
 
 
-        netWorth = netAssets.subtract(netLiabilites);
+        netWorth = netAssets.subtract(netLiabilities);
 
         String currencyCode = StringUtils.isNotBlank(requestDto.getCurrencyCode()) ? requestDto.getCurrencyCode() : DEFAULT_CURRENCY.getCurrencyCode();
 
@@ -69,5 +74,50 @@ public class NetWorthCalculatorServiceImpl implements NetworthCalculatorService 
 
         return new NetWorthResponseDto(netWorthAsString, currencyCode);
 
+    }
+
+    @Override
+    public NetWorthCurrencyConversionDto calculateWithCurrency(NetWorthRequestDto requestDto, String fromCurr) {
+
+        log.info("Converting to {}", fromCurr);
+        Currency fromCurrency = Currency.fromCurrencyCode(fromCurr);
+        Currency toCurrency = Currency.fromCurrencyCode(requestDto.getCurrencyCode());
+
+        AssetsResponseDto assetsDto = new AssetsResponseDto();
+
+        assetsDto.setChequingBalance(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getChequingBalance()));
+        assetsDto.setSavingsForTaxes(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getSavingsForTaxes()));
+        assetsDto.setRainyDayFund(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getRainyDayFund()));
+        assetsDto.setSavingsForFun(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getSavingsForFun()));
+        assetsDto.setSavingsForTravel(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getSavingsForTravel()));
+        assetsDto.setSavingsForPersonalDevelopment(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getSavingsForPersonalDevelopment()));
+        assetsDto.setInvestment1(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getInvestment1()));
+        assetsDto.setInvestment2(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getInvestment2()));
+        assetsDto.setInvestment3(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getInvestment3()));
+        assetsDto.setInvestment4(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getInvestment4()));
+        assetsDto.setInvestment5(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getInvestment5()));
+        assetsDto.setPrimaryHome(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getPrimaryHome()));
+        assetsDto.setSecondHome(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getSecondHome()));
+        assetsDto.setOthers(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getOthers()));
+        assetsDto.setLongTermAssets(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getLongTermAssets()));
+
+        LiabilitiesResponseDto liabilitiesDto = new LiabilitiesResponseDto();
+
+        liabilitiesDto.setCreditCard1(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getCreditCard1()));
+        liabilitiesDto.setCreditCard2(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getCreditCard2()));
+        liabilitiesDto.setOther(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getOther()));
+        liabilitiesDto.setLongTermDebt(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getLongTermDebt()));
+        liabilitiesDto.setMortgage1(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getMortgage1()));
+        liabilitiesDto.setMortgage2(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getMortgage2()));
+        liabilitiesDto.setLineOfCredit(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getLineOfCredit()));
+        liabilitiesDto.setInvestmentLoan(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getInvestmentLoan()));
+        liabilitiesDto.setStudentLoan(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getStudentLoan()));
+        liabilitiesDto.setCarLoan(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getCarLoan()));
+
+        NetWorthResponseDto netWorthResponseDto = calculate(requestDto);
+
+        return new NetWorthCurrencyConversionDto(assetsDto, liabilitiesDto, Currency.convertWithFormatting(fromCurrency, toCurrency,
+                netWorthResponseDto.getNetworthAmount()
+        ), requestDto.getCurrencyCode());
     }
 }

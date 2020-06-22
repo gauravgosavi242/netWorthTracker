@@ -1,8 +1,8 @@
 package com.github.gauravgosavi.networthtracker.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.gauravgosavi.networthtracker.dto.NetWorthRequestDto;
-import com.github.gauravgosavi.networthtracker.dto.NetWorthResponseDto;
+import com.github.gauravgosavi.networthtracker.dto.request.NetWorthRequestDto;
+import com.github.gauravgosavi.networthtracker.dto.response.NetWorthResponseDto;
 import com.github.gauravgosavi.networthtracker.service.NetWorthCalculatorServiceImpl;
 import com.github.gauravgosavi.networthtracker.service.NetworthCalculatorService;
 import lombok.SneakyThrows;

@@ -1,4 +1,4 @@
-package com.github.gauravgosavi.networthtracker.dto;
+package com.github.gauravgosavi.networthtracker.dto.request;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
