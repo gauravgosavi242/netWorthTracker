@@ -14,12 +14,11 @@ class AppNav extends Component {
                     <NavLink href="/components/">Help</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href="/signin/">Sign IN</NavLink>
-                  </NavItem>
-                  <NavItem>
                     <NavLink href="https://github.com/gauravgosavi242">About me</NavLink>
                   </NavItem>
-                  
+                  <NavItem>
+                    <NavLink href="/signin/">Sign IN</NavLink>
+                  </NavItem>
                 </Nav>
                 {/* <NavbarText>Simple Text</NavbarText> */}
             </Navbar>
