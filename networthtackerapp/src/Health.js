@@ -9,7 +9,7 @@ class Health extends React.Component {
 
   async componentDidMount() {
     const response = await fetch("/actuator/health");
-    const body = response.statusText;
+    const body = response.status;
     this.setState({ Health: body, isLoading: false });
   }
   render() {
@@ -19,7 +19,7 @@ class Health extends React.Component {
     return (
       <div>
          <AppNav/> 
-        <h2> Healthcheck </h2>
+        <h3> Healthcheck </h3>
         {<div id="ABS"> {Health}</div>}
       </div>
     );

@@ -1,29 +1,21 @@
-// import React from 'react';
-// import logo from './logo.svg';
-// import './App.css';
-// /**
-//  * This will not be used anymore.
-//  */
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <h1>Jai Shree Ram</h1>
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
+import React, { Component } from 'react';
+import Home from './Home';
+import Health from './Health';
+import {Route, BrowserRouter as Router, Switch} from 'react-router-dom';
 
-// export default App;
+class App extends Component {
+  state = {  }
+  render() { 
+    return ( 
+      <Router>
+        <switch>
+          <Route path ='/' exact = {true} component= {Home}/>
+          <Route path ='/actuator/health' exact = {true} component ={Health}/>
+
+        </switch>
+      </Router>
+     );
+  }
+}
+ 
+export default App;

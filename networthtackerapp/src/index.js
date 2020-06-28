@@ -1,14 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Health from "./Health";
-import Home from './Home'
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.css'
+import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Health />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
