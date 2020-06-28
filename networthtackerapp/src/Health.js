@@ -9,7 +9,7 @@ class Health extends React.Component {
 
   async componentDidMount() {
     const response = await fetch("/actuator/health");
-    const body = response.status;
+    const body = response.statusText;
     this.setState({ Health: body, isLoading: false });
   }
   render() {

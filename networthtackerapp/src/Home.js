@@ -6,8 +6,16 @@ class Home extends Component {
     return (
       <div>
         <AppNav />
-
-        <h3>HOME PAGE</h3>
+        <h2
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          Welcome to the simple Networth tracker app !
+        </h2>
       </div>
     );
   }
