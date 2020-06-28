@@ -1,5 +1,6 @@
 package com.github.gauravgosavi.networthtracker.dto.request;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 public class CurrenncyDto implements Serializable {
     private static final long serialVersionUID = 1L;
