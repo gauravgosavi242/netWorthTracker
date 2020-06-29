@@ -21,7 +21,7 @@ class AppNav extends Component {
                     <NavLink href="https://github.com/gauravgosavi242">About me</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href="/signin/">Sign In</NavLink>
+                    <NavLink href="/currency/all">Currency</NavLink>
                   </NavItem>
                 </Nav>
             </Navbar>

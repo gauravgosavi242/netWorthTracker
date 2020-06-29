@@ -3,6 +3,7 @@ package com.github.gauravgosavi.networthtracker.service.enums;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Locale;
@@ -21,12 +22,12 @@ public enum Currency {
 
     private int id;
     private String currencyCode;
-    private Double exchangeRate;
+    private BigDecimal exchangeRate;
 
     Currency(int id, String currencyCode, Double exchangeRate) {
         this.id=id;
         this.currencyCode = currencyCode;
-        this.exchangeRate = exchangeRate;
+        this.exchangeRate = BigDecimal.valueOf(exchangeRate);
     }
 
     public static Currency fromCurrencyCode(String currencyCode){
@@ -35,7 +36,7 @@ public enum Currency {
         );
     }
 
-    public Double getExchangeRate() {
+    public BigDecimal getExchangeRate() {
         return exchangeRate;
     }
 
@@ -45,15 +46,15 @@ public enum Currency {
 
     public static BigDecimal convert(Currency from, Currency to, BigDecimal amount){
         Assert.notNull(amount, "Need valid currency amount to convert");
-        BigDecimal toUSD = amount.multiply(new BigDecimal(from.getExchangeRate()));
-        return toUSD.multiply(new BigDecimal(to.getExchangeRate()));
+        BigDecimal toUSD = amount.multiply((from.getExchangeRate()));
+        return toUSD.multiply((to.getExchangeRate())).setScale(2, RoundingMode.CEILING);
     }
 
     public static String convertWithFormatting(Currency from, Currency to, BigDecimal amount){
         Assert.notNull(amount, "Need valid currency amount to convert");
-        BigDecimal toUSD = amount.multiply(new BigDecimal(from.getExchangeRate()));
+        BigDecimal toUSD = amount.multiply((from.getExchangeRate()));
 
-        BigDecimal convertedAmt = toUSD.multiply(new BigDecimal(to.getExchangeRate()));
+        BigDecimal convertedAmt = toUSD.multiply((to.getExchangeRate())).setScale(2, RoundingMode.CEILING);
 
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault());
         java.util.Currency currency = java.util.Currency.getInstance(to.getCurrencyCode());

@@ -4,6 +4,7 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.css'
 import App from './App';
+import Currency from './Currency';
 
 ReactDOM.render(
   <React.StrictMode>

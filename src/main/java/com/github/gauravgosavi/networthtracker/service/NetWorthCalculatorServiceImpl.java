@@ -1,5 +1,9 @@
 package com.github.gauravgosavi.networthtracker.service;
 
+import com.github.gauravgosavi.networthtracker.dto.request.AssetDto;
+import com.github.gauravgosavi.networthtracker.dto.request.AssetRequestDto;
+import com.github.gauravgosavi.networthtracker.dto.request.LiabilityDto;
+import com.github.gauravgosavi.networthtracker.dto.request.LiabilityRequestDto;
 import com.github.gauravgosavi.networthtracker.dto.request.NetWorthRequestDto;
 import com.github.gauravgosavi.networthtracker.dto.response.AssetsResponseDto;
 import com.github.gauravgosavi.networthtracker.dto.response.LiabilitiesResponseDto;
@@ -12,8 +16,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service("networthCalculatorService")
@@ -22,6 +29,7 @@ public class NetWorthCalculatorServiceImpl implements NetworthCalculatorService 
     private static final Currency DEFAULT_CURRENCY = Currency.USD; // Assuming default currency to be USD
 
     @Override
+    @Deprecated
     public NetWorthResponseDto calculate(NetWorthRequestDto requestDto) {
         log.info("Received request");
         log.debug("Detail request {}", requestDto);
@@ -71,11 +79,12 @@ public class NetWorthCalculatorServiceImpl implements NetworthCalculatorService 
 
         Assert.notNull(netWorthAsString, "Need non null net worth");
 
-        return new NetWorthResponseDto(netWorthAsString, currencyCode);
+        return new NetWorthResponseDto(null, null, netWorthAsString, currencyCode);
 
     }
 
     @Override
+    @Deprecated
     public NetWorthCurrencyConversionDto calculateWithCurrency(NetWorthRequestDto requestDto, String fromCurr) {
 
         log.info("Converting to {}", fromCurr);
@@ -117,5 +126,52 @@ public class NetWorthCalculatorServiceImpl implements NetworthCalculatorService 
         return new NetWorthCurrencyConversionDto(assetsDto, liabilitiesDto, Currency.convertWithFormatting(fromCurrency, toCurrency,
                 netWorthResponseDto.getNetworthAmount()
         ), requestDto.getCurrencyCode());
+    }
+
+    @Override
+    public NetWorthResponseDto calculateWithCurrencyV2(NetWorthRequestDto requestDto, String fromCurrency) {
+        AssetRequestDto assetRequestDto = requestDto.getAssetRequestDto();
+        LiabilityRequestDto liabilityRequestDto = requestDto.getLiabilityRequestDto();
+
+        currencyConvertIncomingRequests(assetRequestDto, liabilityRequestDto,
+                Currency.fromCurrencyCode(fromCurrency), Currency.fromCurrencyCode(requestDto.getCurrencyCode()));
+
+        Optional<BigDecimal> assetValueOptional = assetRequestDto.getAssetDtos().stream().map(AssetDto::getValue)
+                .collect(Collectors.toList()).stream()
+                .reduce(BigDecimal::add);
+
+        BigDecimal assetValue = assetValueOptional.orElse(BigDecimal.ZERO).setScale(2, RoundingMode.CEILING);
+        log.info("Net assets {}", assetValue);
+
+        Optional<BigDecimal> liabilityValueOptional = liabilityRequestDto.getLiabilityDto().stream().map(LiabilityDto::getValue)
+                .collect(Collectors.toList()).stream()
+                .reduce(BigDecimal::add);
+
+        BigDecimal liabilityValue = liabilityValueOptional.orElse(BigDecimal.ZERO).setScale(2, RoundingMode.CEILING);
+
+        log.info("Net Liability {}", liabilityValue);
+
+        BigDecimal networth = assetValue.subtract(liabilityValue);
+
+        log.info("Net Worth {}", networth);
+
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        java.util.Currency currency = java.util.Currency.getInstance(requestDto.getCurrencyCode());
+        numberFormat.setCurrency(currency);
+
+        return new NetWorthResponseDto(assetRequestDto.getAssetDtos(), liabilityRequestDto.getLiabilityDto(), numberFormat.format(networth), requestDto.getCurrencyCode());
+    }
+
+    private void currencyConvertIncomingRequests(AssetRequestDto assetRequestDto, LiabilityRequestDto liabilityRequestDto, Currency fromCurrency, Currency toCurrency) {
+        for (AssetDto assetDto : assetRequestDto.getAssetDtos()) {
+            BigDecimal assetVal = assetDto.getValue();
+            BigDecimal convertedValue = Currency.convert(fromCurrency, toCurrency, assetVal);
+            assetDto.setValue(convertedValue);
+        }
+        for (LiabilityDto liabilityDto : liabilityRequestDto.getLiabilityDto()) {
+            BigDecimal liabilityVal = liabilityDto.getValue();
+            BigDecimal convertedValue = Currency.convert(fromCurrency, toCurrency, liabilityVal);
+            liabilityDto.setValue((convertedValue));
+        }
     }
 }

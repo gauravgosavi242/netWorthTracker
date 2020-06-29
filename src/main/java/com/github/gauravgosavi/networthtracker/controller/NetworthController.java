@@ -25,15 +25,24 @@ public class NetworthController {
     }
 
     @RequestMapping(method = PUT, value = "/")
+    @Deprecated
     public NetWorthResponseDto calculate(@RequestBody NetWorthRequestDto requestDto){
         return networthCalculatorService.calculate(requestDto);
 
     }
 
     @RequestMapping(method = PUT, value = "/{from-currency}/currency")
+    @Deprecated
     public NetWorthCurrencyConversionDto calculateWithCurrency(
             @PathVariable("from-currency") String fromCurrency,
             @RequestBody NetWorthRequestDto requestDto){
         return networthCalculatorService.calculateWithCurrency(requestDto, fromCurrency);
+    }
+
+    @RequestMapping(method = PUT, value = "/{from-currency}/currency/v2")
+    public NetWorthResponseDto calculateWithCurrencyV2(
+            @PathVariable("from-currency") String fromCurrency,
+            @RequestBody NetWorthRequestDto requestDto){
+        return networthCalculatorService.calculateWithCurrencyV2(requestDto, fromCurrency);
     }
 }

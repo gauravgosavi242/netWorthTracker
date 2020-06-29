@@ -8,4 +8,6 @@ public interface NetworthCalculatorService {
     NetWorthResponseDto calculate(NetWorthRequestDto requestDto);
 
     NetWorthCurrencyConversionDto calculateWithCurrency(NetWorthRequestDto requestDto, String fromCurrency);
+
+    NetWorthResponseDto calculateWithCurrencyV2(NetWorthRequestDto requestDto, String fromCurrency);
 }
