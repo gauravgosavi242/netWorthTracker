@@ -8,21 +8,23 @@ import java.util.Arrays;
 import java.util.Locale;
 
 public enum Currency {
-    USD("USD", 1.0),
-    CAD("CAD", 1.3),
-    AUD("AUD", 1.4),
-    EUR("EUR", 0.8),
-    GBP("GBP", 0.8),
-    INR("INR", 76.2),
-    CHF("CHF", 0.9),
-    JPY("JPY", 106.8),
-    CNY("CNY", 7.0),
-    NZD("NZY", 1.5);
+    USD(1, "USD", 1.0),
+    CAD(2, "CAD", 1.3),
+    AUD(3, "AUD", 1.4),
+    EUR(4, "EUR", 0.8),
+    GBP(5, "GBP", 0.8),
+    INR(6, "INR", 76.2),
+    CHF(7, "CHF", 0.9),
+    JPY(8, "JPY", 106.8),
+    CNY(9, "CNY", 7.0),
+    NZD(10, "NZY", 1.5);
 
+    private int id;
     private String currencyCode;
     private Double exchangeRate;
 
-    Currency(String currencyCode, Double exchangeRate) {
+    Currency(int id, String currencyCode, Double exchangeRate) {
+        this.id=id;
         this.currencyCode = currencyCode;
         this.exchangeRate = exchangeRate;
     }
@@ -64,5 +66,9 @@ public enum Currency {
         Assert.notNull(amount, "Need valid currency amount to convert");
         String amountWithoutCurrencyCode = amount.replaceAll("[^A-Za-z0-9]", "");
         return convertWithFormatting(from, to, new BigDecimal(amountWithoutCurrencyCode));
+    }
+
+    public Integer getID() {
+        return this.id;
     }
 }

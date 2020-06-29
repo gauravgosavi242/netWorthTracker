@@ -1,15 +1,19 @@
 package com.github.gauravgosavi.networthtracker.controller;
 
-import com.github.gauravgosavi.networthtracker.dto.request.CurrenncyDto;
+import com.github.gauravgosavi.networthtracker.dto.request.CurrencyDto;
+import com.github.gauravgosavi.networthtracker.dto.response.CurrencyResponseDto;
 import com.github.gauravgosavi.networthtracker.service.CurrencyService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/currency")
 public class CurrencyController {
@@ -21,7 +25,10 @@ public class CurrencyController {
     }
 
     @RequestMapping(method = GET, value = "/all")
-    public Set<CurrenncyDto> getAllCurrencies(){
-        return currencyService.getAll();
+    public CurrencyResponseDto getAllCurrencies(){
+        log.info("Received currencies call");
+        Collection<CurrencyDto> result = currencyService.getAll();
+        log.info(Arrays.toString(result.toArray()));
+        return new CurrencyResponseDto(result);
     }
 }

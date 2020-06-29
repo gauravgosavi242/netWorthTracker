@@ -1,10 +1,10 @@
 package com.github.gauravgosavi.networthtracker.service;
 
-import com.github.gauravgosavi.networthtracker.dto.request.CurrenncyDto;
+import com.github.gauravgosavi.networthtracker.dto.request.CurrencyDto;
 
-import java.util.Set;
+import java.util.Collection;
 
 public interface CurrencyService {
 
-    Set<CurrenncyDto> getAll();
+    Collection<CurrencyDto> getAll();
 }
