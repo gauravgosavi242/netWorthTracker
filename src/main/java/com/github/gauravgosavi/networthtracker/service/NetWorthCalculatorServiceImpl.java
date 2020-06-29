@@ -52,7 +52,6 @@ public class NetWorthCalculatorServiceImpl implements NetworthCalculatorService 
         netLiabilities = netLiabilities.add(requestDto.getLiabilitiesDto().getCreditCard1())
                 .add(requestDto.getLiabilitiesDto().getCreditCard2())
                 .add(requestDto.getLiabilitiesDto().getOther())
-                .add(requestDto.getLiabilitiesDto().getLongTermDebt())
                 .add(requestDto.getLiabilitiesDto().getMortgage1())
                 .add(requestDto.getLiabilitiesDto().getMortgage2())
                 .add(requestDto.getLiabilitiesDto().getLineOfCredit())
@@ -106,7 +105,6 @@ public class NetWorthCalculatorServiceImpl implements NetworthCalculatorService 
         liabilitiesDto.setCreditCard1(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getCreditCard1()));
         liabilitiesDto.setCreditCard2(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getCreditCard2()));
         liabilitiesDto.setOther(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getOther()));
-        liabilitiesDto.setLongTermDebt(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getLongTermDebt()));
         liabilitiesDto.setMortgage1(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getMortgage1()));
         liabilitiesDto.setMortgage2(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getMortgage2()));
         liabilitiesDto.setLineOfCredit(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getLineOfCredit()));

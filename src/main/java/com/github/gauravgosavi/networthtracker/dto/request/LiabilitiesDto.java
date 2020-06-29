@@ -20,7 +20,6 @@ public class LiabilitiesDto implements Serializable {
     private BigDecimal creditCard1 = BigDecimal.ZERO;
     private BigDecimal creditCard2 = BigDecimal.ZERO;
     private BigDecimal other = BigDecimal.ZERO;
-    private BigDecimal longTermDebt = BigDecimal.ZERO;
     private BigDecimal mortgage1 = BigDecimal.ZERO;
     private BigDecimal mortgage2 = BigDecimal.ZERO;
     private BigDecimal lineOfCredit = BigDecimal.ZERO;
