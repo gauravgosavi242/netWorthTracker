@@ -3,6 +3,7 @@ package com.github.gauravgosavi.networthtracker.model.response;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.github.gauravgosavi.networthtracker.Utils;
 import com.github.gauravgosavi.networthtracker.model.request.AssetDto;
+import com.github.gauravgosavi.networthtracker.service.enums.Currency;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class AssetResponseDto {
     private String name;
     private String value=BigDecimal.ZERO.toString();
 
-    public AssetResponseDto(AssetDto assetDto, String toCurrency) {
+    public AssetResponseDto(AssetDto assetDto, Currency toCurrency) {
         this.id=assetDto.getId();
         this.name=assetDto.getName();
         this.value= Utils.getFormattedCurrency(toCurrency, assetDto.getValue());;

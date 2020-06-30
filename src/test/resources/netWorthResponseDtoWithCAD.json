@@ -3,123 +3,123 @@
     {
       "id":1,
       "name":"chequingBalance",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":2,
       "name":"savingsForTaxes",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":3,
       "name":"savingsForTravel",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":4,
       "name":"savingsForPersonalDev",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":5,
       "name":"savingsForFun",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":6,
       "name":"rainyDayFund",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":7,
       "name":"investment1",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":8,
       "name":"investment2",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":9,
       "name":"investment3",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":10,
       "name":"investment4",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":11,
       "name":"investment5",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":12,
       "name":"primaryHome",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":13,
       "name":"secondaryHome",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":14,
       "name":"others",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     }
   ],
   "liabilityDto":[
     {
       "id":1,
       "name":"creditCard1",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":2,
       "name":"creditCard2",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":3,
       "name":"other",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":4,
       "name":"mortgage1",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":5,
       "name":"mortgage2",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":6,
       "name":"lineOfCredit",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":7,
       "name":"investmentLoan",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":8,
       "name":"studentLoan",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     },
     {
       "id":9,
       "name":"carLoan",
-      "value":"$13,000.00"
+      "value":"$16,900.00"
     }
   ],
   "netAssets":"$182,000.00",
   "netLiabilites":"$117,000.00",
   "networthAmount":"$65,000.00",
-  "currencyCode":"USD"
+  "currencyCode":"CAD"
 }

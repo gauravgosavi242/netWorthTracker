@@ -3,6 +3,7 @@ package com.github.gauravgosavi.networthtracker.model.response;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.github.gauravgosavi.networthtracker.Utils;
 import com.github.gauravgosavi.networthtracker.model.request.LiabilityDto;
+import com.github.gauravgosavi.networthtracker.service.enums.Currency;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class LiabilityResponseDto {
     private String name;
     private String value = BigDecimal.ZERO.toString();
 
-    public LiabilityResponseDto(LiabilityDto liabilityDto, String toCurrency) {
+    public LiabilityResponseDto(LiabilityDto liabilityDto, Currency toCurrency) {
         this.id=liabilityDto.getId();
         this.name=liabilityDto.getName();
         this.value= Utils.getFormattedCurrency(toCurrency, liabilityDto.getValue());

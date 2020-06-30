@@ -1,7 +1,7 @@
 package com.github.gauravgosavi.networthtracker.controller;
 
 import com.github.gauravgosavi.networthtracker.model.request.NetWorthRequestDto;
-import com.github.gauravgosavi.networthtracker.model.response.NetWorthResponseDto;
+import com.github.gauravgosavi.networthtracker.model.response.NetWorthInfoDto;
 import com.github.gauravgosavi.networthtracker.service.NetworthCalculatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,17 +24,19 @@ public class NetworthController {
         this.networthCalculatorService = networthCalculatorService;
     }
 
-//    @RequestMapping(method = PUT, value = "/calculate/{currency}")
-//    public
-
-
+    @RequestMapping(method = PUT, value = "/calculate/{currency}")
+    public NetWorthInfoDto calculate(
+            @PathVariable("currency") String currency,
+            @RequestBody NetWorthRequestDto netWorthRequestDto){
+        return networthCalculatorService.calculate(netWorthRequestDto, currency);
+    }
 
     @RequestMapping(method = PUT, value = "/{from-currency}/currency/{to-currency}/to/v2")
-    public NetWorthResponseDto calculateWithCurrencyV2(
+    public NetWorthInfoDto calculateWithCurrencyV2(
             @PathVariable("from-currency") String fromCurrency,
             @PathVariable("to-currency") String toCurrency,
 
-            @RequestBody NetWorthRequestDto requestDto){
+            @RequestBody NetWorthInfoDto requestDto){
         return networthCalculatorService.convertToCurrency(requestDto, fromCurrency, toCurrency);
     }
 }

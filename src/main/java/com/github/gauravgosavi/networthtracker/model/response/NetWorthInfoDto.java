@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class NetWorthResponseDto implements Serializable {
+public class NetWorthInfoDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private List<AssetResponseDto> assetDtos;
