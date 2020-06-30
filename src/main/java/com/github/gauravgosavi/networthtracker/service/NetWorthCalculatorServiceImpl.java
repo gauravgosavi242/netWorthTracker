@@ -1,26 +1,25 @@
 package com.github.gauravgosavi.networthtracker.service;
 
-import com.github.gauravgosavi.networthtracker.dto.request.AssetDto;
-import com.github.gauravgosavi.networthtracker.dto.request.AssetRequestDto;
-import com.github.gauravgosavi.networthtracker.dto.request.LiabilityDto;
-import com.github.gauravgosavi.networthtracker.dto.request.LiabilityRequestDto;
-import com.github.gauravgosavi.networthtracker.dto.request.NetWorthRequestDto;
-import com.github.gauravgosavi.networthtracker.dto.response.AssetsResponseDto;
-import com.github.gauravgosavi.networthtracker.dto.response.LiabilitiesResponseDto;
-import com.github.gauravgosavi.networthtracker.dto.response.NetWorthCurrencyConversionDto;
-import com.github.gauravgosavi.networthtracker.dto.response.NetWorthResponseDto;
+import com.github.gauravgosavi.networthtracker.Utils;
+import com.github.gauravgosavi.networthtracker.model.request.AssetDto;
+import com.github.gauravgosavi.networthtracker.model.request.AssetRequestDto;
+import com.github.gauravgosavi.networthtracker.model.request.LiabilityDto;
+import com.github.gauravgosavi.networthtracker.model.request.LiabilityRequestDto;
+import com.github.gauravgosavi.networthtracker.model.request.NetWorthRequestDto;
+import com.github.gauravgosavi.networthtracker.model.response.AssetResponseDto;
+import com.github.gauravgosavi.networthtracker.model.response.LiabilityResponseDto;
+import com.github.gauravgosavi.networthtracker.model.response.NetWorthResponseDto;
 import com.github.gauravgosavi.networthtracker.service.enums.Currency;
-import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.NumberFormat;
-import java.util.Locale;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.collections4.ListUtils.emptyIfNull;
 
 @Slf4j
 @Service("networthCalculatorService")
@@ -29,121 +28,22 @@ public class NetWorthCalculatorServiceImpl implements NetworthCalculatorService 
     private static final Currency DEFAULT_CURRENCY = Currency.USD; // Assuming default currency to be USD
 
     @Override
-    @Deprecated
-    public NetWorthResponseDto calculate(NetWorthRequestDto requestDto) {
-        log.info("Received request");
-        log.debug("Detail request {}", requestDto);
-
-        BigDecimal netWorth;
-
-        //Add assets
-        BigDecimal netAssets = BigDecimal.ZERO;
-        netAssets = netAssets.add(requestDto.getAssetsDto().getChequingBalance())
-                .add(requestDto.getAssetsDto().getSavingsForTaxes())
-                .add(requestDto.getAssetsDto().getRainyDayFund())
-                .add(requestDto.getAssetsDto().getSavingsForFun())
-                .add(requestDto.getAssetsDto().getSavingsForTravel())
-                .add(requestDto.getAssetsDto().getSavingsForPersonalDevelopment())
-                .add(requestDto.getAssetsDto().getInvestment1())
-                .add(requestDto.getAssetsDto().getInvestment2())
-                .add(requestDto.getAssetsDto().getInvestment3())
-                .add(requestDto.getAssetsDto().getInvestment4())
-                .add(requestDto.getAssetsDto().getInvestment5())
-                .add(requestDto.getAssetsDto().getPrimaryHome())
-                .add(requestDto.getAssetsDto().getSecondHome())
-                .add(requestDto.getAssetsDto().getOthers())
-                .add(requestDto.getAssetsDto().getLongTermAssets());
-
-
-        //Add Liabilities
-        BigDecimal netLiabilities = BigDecimal.ZERO;
-        netLiabilities = netLiabilities.add(requestDto.getLiabilitiesDto().getCreditCard1())
-                .add(requestDto.getLiabilitiesDto().getCreditCard2())
-                .add(requestDto.getLiabilitiesDto().getOther())
-                .add(requestDto.getLiabilitiesDto().getMortgage1())
-                .add(requestDto.getLiabilitiesDto().getMortgage2())
-                .add(requestDto.getLiabilitiesDto().getLineOfCredit())
-                .add(requestDto.getLiabilitiesDto().getInvestmentLoan())
-                .add(requestDto.getLiabilitiesDto().getStudentLoan())
-                .add(requestDto.getLiabilitiesDto().getCarLoan());
-
-
-        netWorth = netAssets.subtract(netLiabilities);
-
-        String currencyCode = StringUtils.isNotBlank(requestDto.getCurrencyCode()) ? requestDto.getCurrencyCode() : DEFAULT_CURRENCY.getCurrencyCode();
-
-        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault());
-        java.util.Currency currency = java.util.Currency.getInstance(currencyCode);
-        numberFormat.setCurrency(currency);
-        String netWorthAsString = numberFormat.format(netWorth);
-
-        Assert.notNull(netWorthAsString, "Need non null net worth");
-
-        return new NetWorthResponseDto(null, null, netWorthAsString, currencyCode);
-
-    }
-
-    @Override
-    @Deprecated
-    public NetWorthCurrencyConversionDto calculateWithCurrency(NetWorthRequestDto requestDto, String fromCurr) {
-
-        log.info("Converting to {}", fromCurr);
-        Currency fromCurrency = Currency.fromCurrencyCode(fromCurr);
-        Currency toCurrency = Currency.fromCurrencyCode(requestDto.getCurrencyCode());
-
-        AssetsResponseDto assetsDto = new AssetsResponseDto();
-
-        assetsDto.setChequingBalance(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getChequingBalance()));
-        assetsDto.setSavingsForTaxes(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getSavingsForTaxes()));
-        assetsDto.setRainyDayFund(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getRainyDayFund()));
-        assetsDto.setSavingsForFun(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getSavingsForFun()));
-        assetsDto.setSavingsForTravel(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getSavingsForTravel()));
-        assetsDto.setSavingsForPersonalDevelopment(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getSavingsForPersonalDevelopment()));
-        assetsDto.setInvestment1(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getInvestment1()));
-        assetsDto.setInvestment2(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getInvestment2()));
-        assetsDto.setInvestment3(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getInvestment3()));
-        assetsDto.setInvestment4(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getInvestment4()));
-        assetsDto.setInvestment5(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getInvestment5()));
-        assetsDto.setPrimaryHome(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getPrimaryHome()));
-        assetsDto.setSecondHome(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getSecondHome()));
-        assetsDto.setOthers(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getOthers()));
-        assetsDto.setLongTermAssets(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getAssetsDto().getLongTermAssets()));
-
-        LiabilitiesResponseDto liabilitiesDto = new LiabilitiesResponseDto();
-
-        liabilitiesDto.setCreditCard1(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getCreditCard1()));
-        liabilitiesDto.setCreditCard2(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getCreditCard2()));
-        liabilitiesDto.setOther(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getOther()));
-        liabilitiesDto.setMortgage1(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getMortgage1()));
-        liabilitiesDto.setMortgage2(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getMortgage2()));
-        liabilitiesDto.setLineOfCredit(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getLineOfCredit()));
-        liabilitiesDto.setInvestmentLoan(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getInvestmentLoan()));
-        liabilitiesDto.setStudentLoan(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getStudentLoan()));
-        liabilitiesDto.setCarLoan(Currency.convertWithFormatting(fromCurrency, toCurrency, requestDto.getLiabilitiesDto().getCarLoan()));
-
-        NetWorthResponseDto netWorthResponseDto = calculate(requestDto);
-
-        return new NetWorthCurrencyConversionDto(assetsDto, liabilitiesDto, Currency.convertWithFormatting(fromCurrency, toCurrency,
-                netWorthResponseDto.getNetworthAmount()
-        ), requestDto.getCurrencyCode());
-    }
-
-    @Override
-    public NetWorthResponseDto calculateWithCurrencyV2(NetWorthRequestDto requestDto, String fromCurrency) {
+    public NetWorthResponseDto convertToCurrency(NetWorthRequestDto requestDto, String fromCurrency, String toCurrency) {
         AssetRequestDto assetRequestDto = requestDto.getAssetRequestDto();
         LiabilityRequestDto liabilityRequestDto = requestDto.getLiabilityRequestDto();
 
         currencyConvertIncomingRequests(assetRequestDto, liabilityRequestDto,
-                Currency.fromCurrencyCode(fromCurrency), Currency.fromCurrencyCode(requestDto.getCurrencyCode()));
+                Currency.fromCurrencyCode(fromCurrency), Currency.fromCurrencyCode(toCurrency));
 
-        Optional<BigDecimal> assetValueOptional = assetRequestDto.getAssetDtos().stream().map(AssetDto::getValue)
+        Optional<BigDecimal> assetValueOptional;
+        assetValueOptional = emptyIfNull(assetRequestDto.getAssetDtos()).stream().map(AssetDto::getValue)
                 .collect(Collectors.toList()).stream()
                 .reduce(BigDecimal::add);
 
         BigDecimal assetValue = assetValueOptional.orElse(BigDecimal.ZERO).setScale(2, RoundingMode.CEILING);
         log.info("Net assets {}", assetValue);
 
-        Optional<BigDecimal> liabilityValueOptional = liabilityRequestDto.getLiabilityDto().stream().map(LiabilityDto::getValue)
+        Optional<BigDecimal> liabilityValueOptional = emptyIfNull(liabilityRequestDto.getLiabilityDto()).stream().map(LiabilityDto::getValue)
                 .collect(Collectors.toList()).stream()
                 .reduce(BigDecimal::add);
 
@@ -155,23 +55,32 @@ public class NetWorthCalculatorServiceImpl implements NetworthCalculatorService 
 
         log.info("Net Worth {}", networth);
 
-        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault());
-        java.util.Currency currency = java.util.Currency.getInstance(requestDto.getCurrencyCode());
-        numberFormat.setCurrency(currency);
+        return new NetWorthResponseDto(
+                getAssetResponseDtos(assetRequestDto.getAssetDtos(), toCurrency),
+                getLiabilityResponseDtos(liabilityRequestDto.getLiabilityDto(), toCurrency),
+                Utils.getFormattedCurrency(toCurrency, assetValue),
+                Utils.getFormattedCurrency(toCurrency, liabilityValue),
+                Utils.getFormattedCurrency(toCurrency, networth), toCurrency);
+    }
 
-        return new NetWorthResponseDto(assetRequestDto.getAssetDtos(), liabilityRequestDto.getLiabilityDto(), numberFormat.format(networth), requestDto.getCurrencyCode());
+    private List<AssetResponseDto> getAssetResponseDtos(List<AssetDto> assetDtos, String toCurrency) {
+        return emptyIfNull(assetDtos).stream().map(assetDto -> new AssetResponseDto(assetDto, toCurrency)).collect(Collectors.toList());
+    }
+
+    private List<LiabilityResponseDto> getLiabilityResponseDtos(List<LiabilityDto> liabilityDtos, String toCurrency) {
+        return emptyIfNull(liabilityDtos).stream().map(liabilityDto -> new LiabilityResponseDto(liabilityDto, toCurrency)).collect(Collectors.toList());
     }
 
     private void currencyConvertIncomingRequests(AssetRequestDto assetRequestDto, LiabilityRequestDto liabilityRequestDto, Currency fromCurrency, Currency toCurrency) {
-        for (AssetDto assetDto : assetRequestDto.getAssetDtos()) {
+        for (AssetDto assetDto : emptyIfNull(assetRequestDto.getAssetDtos())) {
             BigDecimal assetVal = assetDto.getValue();
             BigDecimal convertedValue = Currency.convert(fromCurrency, toCurrency, assetVal);
             assetDto.setValue(convertedValue);
         }
-        for (LiabilityDto liabilityDto : liabilityRequestDto.getLiabilityDto()) {
+        for (LiabilityDto liabilityDto : emptyIfNull(liabilityRequestDto.getLiabilityDto())) {
             BigDecimal liabilityVal = liabilityDto.getValue();
             BigDecimal convertedValue = Currency.convert(fromCurrency, toCurrency, liabilityVal);
-            liabilityDto.setValue((convertedValue));
+            liabilityDto.setValue(convertedValue);
         }
     }
 }

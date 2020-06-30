@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import AppNav from "./AppNav";
 import { Container, Form, FormGroup, Button } from "reactstrap";
-import { Table,Container,Input,Button,Label, FormGroup, Form} from 'reactstrap';
+import { Table, Input, Label } from "reactstrap";
 
-import Currency from "./Currency";
 class Tracker extends Component {
   liabilityItem = {
-    id: "2",
+    id: 2,
     name: "Credit card",
     value: 2000,
   };
@@ -14,13 +13,19 @@ class Tracker extends Component {
     liabilityItem: [this.liabilityItem],
   };
 
-  assetItem = {
-    id: "1",
+  assetDto = {
+    id: 1,
     name: "house",
     value: 20000,
   };
-  assetItems = {
-    assetItem: [this.assetItem],
+  assetRequestDto = {
+    assetDtos: [this.assetDto],
+  };
+
+  requestDto = {
+    assetRequestDto: this.assetRequestDto,
+
+    currencyCode: "USD",
   };
 
   networth = {
@@ -28,25 +33,68 @@ class Tracker extends Component {
     currency: "USD",
   };
 
-  constructor(props){
-      super(props)
-      this.state={
-        isLoading: true,
-        currencies: [],
-        assetItemsDto: this.assetItems,
-        liabilityItemsDto: this.liabilityItems,
-        networth: this.networth,
-      };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      currencies: [],
+      assetRequestDto: {
+        assetDtos: [
+          { id: 3, name: "car", value: 1000 },
+          { id: 4, name: "house", value: 10000 },
+        ],
+      },
+      liabilityItemsDto: this.liabilityItems,
+      networth: this.networth,
+      selectedCurrency: "USD",
+    };
+    this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   async componentDidMount() {
     const currencyResponse = await fetch("/currency/all");
     const currencyRespBody = await currencyResponse.json();
-    this.setState({ currencies: currencyRespBody, isLoading: false });
+    this.setState({
+      currencies: currencyRespBody,
+      isLoading: false,
+      assetRequestDto: {
+        assetDtos: [
+          { id: 3, name: "car", value: 1000 },
+          { id: 4, name: "house", value: 10000 },
+        ],
+      },
+    });
+  }
+
+  async handleSubmit(event) {
+    const asset = this.state.requestDto;
+    await fetch("calculate/USD/currency/v2", {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(this.requestDto),
+    });
+    event.preventDefault();
+
+    console.log(this.state);
+    // this.props.history.push("/tracker");
+  }
+
+  handleCurrencyChange(e) {
+    console.log(e.target.value);
+    let currState = { ...this.state };
+    let stateVarToBeMutated = { ...this.state.selectedCurrency };
+    stateVarToBeMutated = e.target.value;
+    currState.selectedCurrency = stateVarToBeMutated;
+    this.setState({ currState });
   }
 
   render() {
-    const { currencies, isLoading } = this.state;
+    const { currencies, isLoading, assetItemsDto } = this.state;
+    var selectedCurrency = document.getElementById("currency");
 
     if (isLoading) {
       return <div>Loading please wait...</div>;
@@ -55,258 +103,346 @@ class Tracker extends Component {
       <option id={currency.id}>{currency.currencyCode}</option>
     ));
 
-    console.log(this.liabilityItemsDto);
-
     return (
       <div>
         <AppNav />
         <Container>
           <br />
-          <h2>Assets </h2>
+          <label>Currency</label>{" "}
+          <select id="currency" onChange={this.handleCurrencyChange}>
+            {currencyList}
+          </select>
           <br />
-          <label for="Title">Currency</label> <select>{currencyList}</select> 
-          <br />
-          <h4>Cash and investments</h4>
-          <Form>
-            <FormGroup>
-              <label for="Title">Checking Balance </label>{" "}
-              <input
-                type="number"
-                step=".01"
-                lang="nb"
-                name="checkingBalance"
-                id="checkingBalance"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-
-            <FormGroup>
-              <label for="Title">Saving For Taxes </label>{" "}
-              <input
-                type="number"
-                step=".01"
-                lang="nb"
-                name="savingForTaxes"
-                id="savingForTaxes"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-
-            <FormGroup>
-              <label for="Title">Savings for Fun </label>{" "}
-              <input
-                type="text"
-                name="savingForFun"
-                id="savingForFun"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-
-            <FormGroup>
-              <label for="Title">Rainy day fund </label>{" "}
-              <input
-                type="text"
-                name="raninyDayFund"
-                id="raninyDayFund"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-
-            <FormGroup>
-              <label for="Title">Saving for Travel </label>{" "}
-              <input
-                type="text"
-                name="savingForTravel"
-                id="savingForTravel"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-
-            <FormGroup>
-              <label for="Title">Saving for personal dev </label>{" "}
-              <input
-                type="text"
-                name="savingForPersonalDev"
-                id="savingForPersonalDev"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-
-            <FormGroup>
-              <label for="Title">Investment 1 </label>{" "}
-              <input
-                type="text"
-                name="investment1"
-                id="investment1"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-
-            <FormGroup>
-              <label for="Title">Investment 2 </label>{" "}
-              <input
-                type="text"
-                name="investment2"
-                id="investment2"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-
-            <FormGroup>
-              <label for="Title">Investment 3 </label>{" "}
-              <input
-                type="text"
-                name="investment3"
-                id="investment3"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-
-            <FormGroup>
-              <label for="Title">Investment 4 </label>{" "}
-              <input
-                type="text"
-                name="investment4"
-                id="investment4"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-
-            <FormGroup>
-              <label for="Title">Investment 5 </label>{" "}
-              <input
-                type="text"
-                name="investment5"
-                id="investment5"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
+          <Container>
+            <h3>Net Worth</h3>
+            <h3>Assets</h3>
+            <h4>Cash and investments</h4>
+            <Table striped className="mt-2">
+              <thead>
+                <tr>
+                  <th width="10%">#</th>
+                  <th width="50%">Description</th>
+                  <th width="40%">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Checking balance</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Savings for taxes</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Rainy day fund</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>Saving for Fun</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>{" "}
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Saving for travel</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>Saving for personal development</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>{" "}
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>Investment 1</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>Investment 2</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>{" "}
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>Investment 3</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>{" "}
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>Investment 4</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>{" "}
+                </tr>
+                <tr>
+                  <td>11</td>
+                  <td>Investment 5</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
 
             <h4>Long term assets</h4>
-            <FormGroup>
-              <label for="Title">Primary Home </label>{" "}
-              <input
-                type="text"
-                name="primaryHome"
-                id="primaryHome"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-            <FormGroup>
-              <label for="Title">Secondary Home 5 </label>{" "}
-              <input
-                type="text"
-                name="secondaryHome"
-                id="secondaryHome"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-            <FormGroup>
-              <label for="Title">Other </label>{" "}
-              <input
-                type="text"
-                name="other"
-                id="other"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
+            <Table striped className="mt-2">
+              <thead>
+                <tr>
+                  <th width="10%">#</th>
+                  <th width="50%">Description</th>
+                  <th width="40%">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Primary Home</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Secondary Home</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Other</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+            <h3>Net Assets</h3>
 
-            <h2>Liabilities</h2>
+            <h3>Liabilities</h3>
+            <h4>Short term liabilities</h4>
+            <Table striped className="mt-2">
+              <thead>
+                <tr>
+                  <th width="10%">#</th>
+                  <th width="40%">Description</th>
+                  <th width="20%">Monthly payment</th>
+                  <th width="30%">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Credit card 1</td>
+                  <td>$ 200</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Credit card 2</td>
+                  <td>$ 150</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>(other...)</td>
+                  <td></td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
 
-            <h4>Short term Liabilities</h4>
-
+            <h4>Long term debt</h4>
+            <Table striped className="mt-2">
+              <thead>
+                <tr>
+                  <th width="10%">#</th>
+                  <th width="40%">Description</th>
+                  <th width="20%">Monthly payment</th>
+                  <th width="30%">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Mortgage 1</td>
+                  <td>$ 2000</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Mortgage 2</td>
+                  <td>$ 3500</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Line of credit</td>
+                  <td>$ 500</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>Investment Loan</td>
+                  <td>$ 700</td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Student Loan</td>
+                  <td></td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>Car Loan</td>
+                  <td></td>
+                  <td>
+                    <input
+                      type="text"
+                      step="0.01"
+                      onChange={this.handleChange}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+            <h3>Net Liabilities</h3>
+          </Container>
+          <Form onSubmit={this.handleSubmit}>
             <FormGroup>
-              <label for="Title">Credit card 1 </label>{" "}
-              <input
-                type="text"
-                name="creditCard1"
-                id="creditCard1"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-            <FormGroup>
-              <label for="Title">Credit card 2 </label>{" "}
-              <input
-                type="text"
-                name="creditCard2"
-                id="creditCard2"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-            <FormGroup>
-              <label for="Title">(others...) </label>{" "}
-              <input
-                type="text"
-                name="other"
-                id="other"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-
-            <h4>Long term Debt</h4>
-
-            <FormGroup>
-              <label for="Title">Mortgage 1 </label>{" "}
-              <input
-                type="text"
-                name="mortgage1"
-                id="mortgage1"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-            <FormGroup>
-              <label for="Title">Mortgage 2 </label>{" "}
-              <input
-                type="text"
-                name="mortgage1"
-                id="mortgage2"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-            <FormGroup>
-              <label for="Title">Line of credit </label>{" "}
-              <input
-                type="text"
-                name="lineOfCredit"
-                id="lineOfCredit"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-
-            <FormGroup>
-              <label for="Title">Investment Loan </label>{" "}
-              <input
-                type="text"
-                name="investmentLoan"
-                id="investmentLoan"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-            <FormGroup>
-              <label for="Title">Student Loan </label>{" "}
-              <input
-                type="text"
-                name="studentLoan"
-                id="studentLoan"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-            <FormGroup>
-              <label for="Title">Car Loan </label>{" "}
-              <input
-                type="text"
-                name="carLoan"
-                id="carLoan"
-                onChange={this.handleChange}
-              ></input>
-            </FormGroup>
-
-            <FormGroup>
-              <Button color="primary" type="submit">
+              <Button
+                color="primary"
+                type="submit"
+                onClick={() => this.handleSubmit}
+              >
                 Save
-              </Button>{" "}
-              <Button color="secondary" type="reset">
-                Clear
               </Button>{" "}
             </FormGroup>
           </Form>

@@ -1,34 +1,121 @@
 {
-  "assetsDto":
-    {
-      "chequingBalance":10000,
-      "savingsForTaxes":10000,
-      "rainyDayFund":10000,
-      "savingsForFun":10000,
-      "savingsForTravel":10000,
-      "savingsForPersonalDevelopment":10000,
-      "investment1":10000,
-      "investment2":10000,
-      "investment3":10000,
-      "investment4":10000,
-      "investment5":10000,
-      "longTermAssets":10000,
-      "primaryHome":10000,
-      "secondHome":10000,
-      "others":10000
-    },
-  "liabilitiesDto":
-    {
-      "creditCard1":1000,
-      "creditCard2":1000,
-      "other":1000,
-      "mortgage1":1000,
-      "mortgage2":1000,
-      "lineOfCredit":1000,
-      "investmentLoan":1000,
-      "studentLoan":1000,
-      "carLoan":1000
-    },
-  "currencyCode":"INR"
-
+  "assetRequestDto": {
+    "assetDtos": [
+      {
+        "id": 1,
+        "name": "chequingBalance",
+        "value": 10000
+      },
+      {
+        "id": 2,
+        "name": "savingsForTaxes",
+        "value": 10000
+      },
+      {
+        "id": 3,
+        "name": "savingsForTravel",
+        "value": 10000
+      },
+      {
+        "id": 4,
+        "name": "savingsForPersonalDev",
+        "value": 10000
+      },
+      {
+        "id": 5,
+        "name": "savingsForFun",
+        "value": 10000
+      },
+      {
+        "id": 6,
+        "name": "rainyDayFund",
+        "value": 10000
+      },
+      {
+        "id": 7,
+        "name": "investment1",
+        "value": 10000
+      },
+      {
+        "id": 8,
+        "name": "investment2",
+        "value": 10000
+      },
+      {
+        "id": 9,
+        "name": "investment3",
+        "value": 10000
+      },
+      {
+        "id": 10,
+        "name": "investment4",
+        "value": 10000
+      },
+      {
+        "id": 11,
+        "name": "investment5",
+        "value": 10000
+      },
+      {
+        "id": 12,
+        "name": "primaryHome",
+        "value": 10000
+      },
+      {
+        "id": 13,
+        "name": "secondaryHome",
+        "value": 10000
+      },
+      {
+        "id": 14,
+        "name": "others",
+        "value": 10000
+      }
+    ]
+  },
+  "liabilityRequestDto": {
+    "liabilityDto": [
+      {
+        "id": 1,
+        "name": "creditCard1",
+        "value": 10000
+      },
+      {
+        "id": 2,
+        "name": "creditCard2",
+        "value": 10000
+      },{
+        "id": 3,
+        "name": "other",
+        "value": 10000
+      },{
+        "id": 4,
+        "name": "mortgage1",
+        "value": 10000
+      },{
+        "id": 5,
+        "name": "mortgage2",
+        "value": 10000
+      },{
+        "id": 6,
+        "name": "lineOfCredit",
+        "value": 10000
+      },{
+        "id": 7,
+        "name": "investmentLoan",
+        "value": 10000
+      },{
+        "id": 8,
+        "name": "studentLoan",
+        "value": 10000
+      },{
+        "id": 9,
+        "name": "carLoan",
+        "value": 10000
+      }
+    ]
+  }
 }
+
+
+

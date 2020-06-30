@@ -1,6 +1,6 @@
 package com.github.gauravgosavi.networthtracker.service;
 
-import com.github.gauravgosavi.networthtracker.dto.request.CurrencyDto;
+import com.github.gauravgosavi.networthtracker.model.request.CurrencyDto;
 import com.github.gauravgosavi.networthtracker.service.enums.Currency;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections4.SetUtils;

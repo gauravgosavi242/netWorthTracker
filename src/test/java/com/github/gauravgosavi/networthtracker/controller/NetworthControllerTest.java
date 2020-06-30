@@ -1,8 +1,8 @@
 package com.github.gauravgosavi.networthtracker.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.gauravgosavi.networthtracker.dto.request.NetWorthRequestDto;
-import com.github.gauravgosavi.networthtracker.dto.response.NetWorthResponseDto;
+import com.github.gauravgosavi.networthtracker.model.request.NetWorthRequestDto;
+import com.github.gauravgosavi.networthtracker.model.response.NetWorthResponseDto;
 import com.github.gauravgosavi.networthtracker.service.NetWorthCalculatorServiceImpl;
 import com.github.gauravgosavi.networthtracker.service.NetworthCalculatorService;
 import lombok.SneakyThrows;
@@ -26,7 +26,7 @@ public class NetworthControllerTest {
         File requestFile = new File(BASE_DIR + REQUEST_DTO);
         NetWorthRequestDto netWorthRequestDto = new ObjectMapper().readValue(requestFile, NetWorthRequestDto.class);
 
-        NetWorthResponseDto netWorthResponseDto = target.calculate(netWorthRequestDto);
+        NetWorthResponseDto netWorthResponseDto = target.calculateWithCurrencyV2("USD","CAD", netWorthRequestDto);
 
         String calculatedResponse = new ObjectMapper().writeValueAsString(netWorthResponseDto);
 

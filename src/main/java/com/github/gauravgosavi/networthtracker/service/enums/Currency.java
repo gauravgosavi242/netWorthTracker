@@ -18,7 +18,7 @@ public enum Currency {
     CHF(7, "CHF", 0.9),
     JPY(8, "JPY", 106.8),
     CNY(9, "CNY", 7.0),
-    NZD(10, "NZY", 1.5);
+    NZD(10, "NZD", 1.5);
 
     private int id;
     private String currencyCode;

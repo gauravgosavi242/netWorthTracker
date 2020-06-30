@@ -1,7 +1,7 @@
 package com.github.gauravgosavi.networthtracker.controller;
 
-import com.github.gauravgosavi.networthtracker.dto.request.CurrencyDto;
-import com.github.gauravgosavi.networthtracker.dto.response.CurrencyResponseDto;
+import com.github.gauravgosavi.networthtracker.model.request.CurrencyDto;
+import com.github.gauravgosavi.networthtracker.model.response.CurrencyResponseDto;
 import com.github.gauravgosavi.networthtracker.service.CurrencyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

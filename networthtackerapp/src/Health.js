@@ -5,7 +5,7 @@ import ServerTable from "react-strap-table";
 class Health extends React.Component {
   state = {
     isLoading: true,
-    Health: [],
+    Health: "",
   };
 
   async componentDidMount() {
@@ -15,24 +15,13 @@ class Health extends React.Component {
   }
   render() {
     const { Health, isLoading } = this.state;
+    console.log(this.state.Health);
     if (isLoading) return <div>Loading...</div>;
 
-    const url = "https://react-strap-table.com/users";
-    const columns = ["id", "name", "email", "created_at"];
-    const options = {
-      headings: { id: "#", created_at: "Created At" },
-      sortable: ["name", "email"],
-    };
     return (
       <div>
         <AppNav />
-        <ServerTable
-          columns={columns}
-          url={url}
-          options={options}
-          bordered
-          hover
-        />
+        <h3>{this.state.Health.status}</h3>
       </div>
     );
   }
