@@ -37,6 +37,9 @@ public class NetWorthCalculatorServiceImpl implements NetworthCalculatorService 
                 Currency.fromCurrencyCode(fromCurrency), Currency.fromCurrencyCode(toCurrency));
 
         requestDto.setCurrencyCode(toCurrency);
+        requestDto.setNetAssets(Currency.convertWithFormatting(Currency.fromCurrencyCode(fromCurrency), Currency.fromCurrencyCode(toCurrency), requestDto.getNetAssets()));
+        requestDto.setNetLiabilites(Currency.convertWithFormatting(Currency.fromCurrencyCode(fromCurrency), Currency.fromCurrencyCode(toCurrency), requestDto.getNetLiabilites()));
+        requestDto.setNetworthAmount(Currency.convertWithFormatting(Currency.fromCurrencyCode(fromCurrency), Currency.fromCurrencyCode(toCurrency), requestDto.getNetworthAmount()));
 
         return requestDto;
     }

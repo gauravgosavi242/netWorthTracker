@@ -49,13 +49,13 @@ public enum Currency {
 
     public static BigDecimal convert(Currency from, Currency to, BigDecimal amount){
         Assert.notNull(amount, "Need valid currency amount to convert");
-        BigDecimal toUSD = amount.multiply((from.getExchangeRate()));
+        BigDecimal toUSD = amount.divide(from.getExchangeRate(), RoundingMode.CEILING);
         return toUSD.multiply((to.getExchangeRate())).setScale(2, RoundingMode.CEILING);
     }
 
     public static String convertWithFormatting(Currency from, Currency to, BigDecimal amount){
         Assert.notNull(amount, "Need valid currency amount to convert");
-        BigDecimal toUSD = amount.multiply((from.getExchangeRate()));
+        BigDecimal toUSD = amount.divide(from.getExchangeRate(), RoundingMode.CEILING);
 
         BigDecimal convertedAmt = toUSD.multiply((to.getExchangeRate())).setScale(2, RoundingMode.CEILING);
 
@@ -69,7 +69,7 @@ public enum Currency {
     @SneakyThrows
     public static String convertWithFormatting(Currency from, Currency to, String amount){
         Assert.notNull(amount, "Need valid currency amount to convert");
-        Number number = NumberFormat.getCurrencyInstance(to.getLocale()).parse(amount);
+        Number number = NumberFormat.getCurrencyInstance(from.getLocale()).parse(amount);
         return convertWithFormatting(from, to, new BigDecimal(number.doubleValue()));
     }
 

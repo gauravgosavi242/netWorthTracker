@@ -24,14 +24,14 @@ public class NetworthController {
         this.networthCalculatorService = networthCalculatorService;
     }
 
-    @RequestMapping(method = PUT, value = "/calculate/{currency}")
+    @RequestMapping(method = PUT, value = "/{currency}")
     public NetWorthInfoDto calculate(
             @PathVariable("currency") String currency,
             @RequestBody NetWorthRequestDto netWorthRequestDto){
         return networthCalculatorService.calculate(netWorthRequestDto, currency);
     }
 
-    @RequestMapping(method = PUT, value = "/{from-currency}/currency/{to-currency}/to/v2")
+    @RequestMapping(method = PUT, value = "/{from-currency}/to/{to-currency}")
     public NetWorthInfoDto calculateWithCurrencyV2(
             @PathVariable("from-currency") String fromCurrency,
             @PathVariable("to-currency") String toCurrency,
